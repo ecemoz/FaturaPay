@@ -4,6 +4,8 @@ import com.yildiz.faturapay.utils.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,4 +26,8 @@ public class User {
 
         @Enumerated(EnumType.STRING)
         private Role role;
+
+        @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<Invoice> invoices;
+
     }
