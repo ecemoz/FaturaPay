@@ -1,13 +1,11 @@
 package com.yildiz.faturapay.services;
 
-
 import com.yildiz.faturapay.models.User;
 import com.yildiz.faturapay.utils.Role;
 import com.yildiz.faturapay.repository.UserRepository;
 import com.yildiz.faturapay.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
