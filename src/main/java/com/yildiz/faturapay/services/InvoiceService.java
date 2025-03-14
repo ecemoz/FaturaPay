@@ -25,7 +25,7 @@ public class InvoiceService {
         this.userRepository = userRepository;
     }
 
-    private User getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         logger.info("Kimlik doğrulanan kullanıcı: {}", username);
         return userRepository.findByUsername(username)
