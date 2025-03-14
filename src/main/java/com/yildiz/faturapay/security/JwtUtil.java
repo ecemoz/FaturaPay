@@ -30,10 +30,10 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        return Jwts.parser() // Use 'parser()' to obtain a JwtParserBuilder
-                .verifyWith(getSigningKey()) // Use 'verifyWith()' to set the signing key
-                .build() // Build the JwtParser
-                .parseClaimsJws(token) // Parse the JWS and get the claims
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
