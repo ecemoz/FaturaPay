@@ -1,5 +1,6 @@
 package com.yildiz.faturapay.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.yildiz.faturapay.utils.SubscriptionPeriod;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,5 +37,6 @@ public class Subscription {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User consumer ;
 }
