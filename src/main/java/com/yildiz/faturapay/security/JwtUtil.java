@@ -15,12 +15,10 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
-    // Gerçek projelerde secret key'inizi daha güvenli bir şekilde (örneğin, environment variable veya application.properties üzerinden Base64 kodlu) saklayın.
-    private final String SECRET_KEY = "rabia_ecem_emre";
 
-    /**
-     * Belirtilen kullanıcı adı için JWT token üretir.
-     */
+    private final String SECRET_KEY = "faturapay_ecem_emre";
+
+
     public String generateToken(String username) {
         logger.debug("Token oluşturuluyor. Kullanıcı adı: {}", username);
         String token = Jwts.builder()
@@ -33,9 +31,7 @@ public class JwtUtil {
         return token;
     }
 
-    /**
-     * Token içerisinden kullanıcı adını (subject) çıkarır.
-     */
+
     public String extractUsername(String token) {
         try {
             String username = extractClaim(token, Claims::getSubject);
@@ -47,9 +43,6 @@ public class JwtUtil {
         }
     }
 
-    /**
-     * Belirtilen fonksiyonu kullanarak token içerisindeki istediğin claim'i çıkarır.
-     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         T claim = claimsResolver.apply(claims);
@@ -57,9 +50,6 @@ public class JwtUtil {
         return claim;
     }
 
-    /**
-     * Token içerisindeki tüm claim'leri çıkarır.
-     */
     private Claims extractAllClaims(String token) {
         try {
             Claims claims = Jwts.parser()
@@ -77,9 +67,6 @@ public class JwtUtil {
         }
     }
 
-    /**
-     * Token'ın imzasını ve son kullanma tarihini kontrol eder.
-     */
     public boolean validateToken(String token) {
         try {
             Claims claims = extractAllClaims(token);

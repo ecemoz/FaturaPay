@@ -51,7 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             logger.warn("Authorization header missing or does not start with 'Bearer '");
         }
 
-        // Eğer SecurityContext'te henüz kimlik doğrulama yapılmamışsa
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtUtil.validateToken(token)) {
