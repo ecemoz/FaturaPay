@@ -4,6 +4,9 @@ import com.yildiz.faturapay.models.User;
 import com.yildiz.faturapay.utils.Role;
 import com.yildiz.faturapay.repository.UserRepository;
 import com.yildiz.faturapay.security.JwtUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -33,6 +36,18 @@ public class AuthService {
         userRepository.save(newUser);
 
         return "Kullanıcı başarıyla kaydedildi!";
+    }
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("Yetkilendirilmiş kullanıcı bulunamadı.");
+        }
+
+        String username = authentication.getName();
+
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Kullanıcı bulunamadı: " + username));
     }
 
     public String loginUser(String username, String password) {

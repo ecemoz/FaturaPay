@@ -19,10 +19,12 @@ public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final UserRepository userRepository;
+    private final AuthService authService;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, UserRepository userRepository) {
+    public InvoiceService(InvoiceRepository invoiceRepository, UserRepository userRepository, AuthService authService) {
         this.invoiceRepository = invoiceRepository;
         this.userRepository = userRepository;
+        this.authService = authService;
     }
 
     public User getAuthenticatedUser() {
@@ -79,6 +81,12 @@ public class InvoiceService {
                 updatedInvoice.getId(), user.getUsername(), updatedInvoice.getTitle(), updatedInvoice.getAmount());
 
         return updatedInvoice;
+    }
+
+    public boolean isOwner(Long invoiceId) {
+        User authenticatedUser = authService.getAuthenticatedUser();
+        Optional<Invoice> invoice = getInvoiceById(invoiceId);
+        return invoice.isPresent() && invoice.get().getUser().getId().equals(authenticatedUser.getId());
     }
 
 

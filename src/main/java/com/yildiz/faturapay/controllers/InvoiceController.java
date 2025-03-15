@@ -1,12 +1,13 @@
 package com.yildiz.faturapay.controllers;
 
 import com.yildiz.faturapay.models.Invoice;
-import com.yildiz.faturapay.models.User;
 import com.yildiz.faturapay.services.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class InvoiceController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllInvoices() {
         try {
             List<Invoice> invoices = invoiceService.getAllInvoices();
@@ -36,6 +38,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @invoiceService.isOwner(#id)")
     public ResponseEntity<Object> getInvoiceById(@PathVariable Long id) {
         try {
             Optional<Invoice> invoice = invoiceService.getInvoiceById(id);
@@ -51,6 +54,7 @@ public class InvoiceController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> addInvoice(@RequestBody Invoice invoice) {
         try {
             if (invoice.getTitle() == null || invoice.getTitle().trim().isEmpty()) {
@@ -68,6 +72,7 @@ public class InvoiceController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @invoiceService.isOwner(#id)")
     public ResponseEntity<?> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoiceDetails) {
         try {
             if (invoiceDetails.getTitle() == null || invoiceDetails.getTitle().trim().isEmpty()) {
@@ -75,17 +80,6 @@ public class InvoiceController {
             }
             if (invoiceDetails.getAmount() == null || invoiceDetails.getAmount().doubleValue() <= 0) {
                 return ResponseEntity.badRequest().body("Fatura tutarı sıfırdan büyük olmalıdır.");
-            }
-
-            Invoice existingInvoice = invoiceService.getInvoiceById(id)
-                    .orElseThrow(() -> new RuntimeException("Güncellenmek istenen fatura bulunamadı!"));
-
-            User authenticatedUser = invoiceService.getAuthenticatedUser();
-
-            if (!existingInvoice.getUser().getId().equals(authenticatedUser.getId())) {
-                logger.error("Yetkisiz işlem! {} kullanıcısı başkasına ait faturayı güncellemeye çalıştı: ID={}",
-                        authenticatedUser.getUsername(), id);
-                return ResponseEntity.status(403).body("Yetkisiz işlem! Bu faturayı güncelleme yetkiniz yok.");
             }
 
             Invoice updatedInvoice = invoiceService.updateInvoice(id, invoiceDetails);
@@ -100,28 +94,12 @@ public class InvoiceController {
         }
     }
 
-
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @invoiceService.isOwner(#id)")
     public ResponseEntity<?> deleteInvoice(@PathVariable Long id) {
         try {
-
-            Invoice existingInvoice = invoiceService.getInvoiceById(id)
-                    .orElseThrow(() -> new RuntimeException("Silinmek istenen fatura bulunamadı!"));
-
-
-            User authenticatedUser = invoiceService.getAuthenticatedUser();
-
-
-            if (!existingInvoice.getUser().getId().equals(authenticatedUser.getId())) {
-                logger.error("Yetkisiz işlem! {} kullanıcısı başkasına ait faturayı silmeye çalıştı: ID={}",
-                        authenticatedUser.getUsername(), id);
-                return ResponseEntity.status(403).body("Yetkisiz işlem! Bu faturayı silme yetkiniz yok.");
-            }
-
-
             invoiceService.deleteInvoice(id);
             return ResponseEntity.ok("Fatura başarıyla silindi: ID=" + id);
-
         } catch (RuntimeException e) {
             logger.error("Fatura silinirken hata oluştu: ID={}, Hata: {}", id, e.getMessage());
             return ResponseEntity.status(403).body(e.getMessage());

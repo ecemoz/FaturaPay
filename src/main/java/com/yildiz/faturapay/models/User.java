@@ -1,5 +1,6 @@
 package com.yildiz.faturapay.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.yildiz.faturapay.utils.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,9 +26,11 @@ public class User {
         private String password;
 
         @Enumerated(EnumType.STRING)
+        @Column(nullable = false)
         private Role role;
 
         @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+        @JsonManagedReference
         private List<Invoice> invoices;
 
     }
