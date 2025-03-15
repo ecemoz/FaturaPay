@@ -2,6 +2,7 @@ package com.yildiz.faturapay.services;
 
 import com.yildiz.faturapay.models.Subscription;
 import com.yildiz.faturapay.models.User;
+import com.yildiz.faturapay.notification.NotificationProducer;
 import com.yildiz.faturapay.repository.SubscriptionRepository;
 import com.yildiz.faturapay.repository.UserRepository;
 import com.yildiz.faturapay.utils.SubscriptionPeriod;
@@ -23,10 +24,12 @@ public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
+    private final NotificationProducer notificationProducer;
 
-    public SubscriptionService(SubscriptionRepository subscriptionRepository, UserRepository userRepository) {
+    public SubscriptionService(SubscriptionRepository subscriptionRepository, UserRepository userRepository, NotificationProducer notificationProducer) {
         this.subscriptionRepository = subscriptionRepository;
         this.userRepository = userRepository;
+        this.notificationProducer = notificationProducer;
     }
 
     private User getAuthenticatedUser() {
@@ -130,18 +133,16 @@ public class SubscriptionService {
     }
 
 
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?") // Her gün sabah 9'da çalışır
     public void sendPaymentReminders() {
-        try {
-            LocalDate today = LocalDate.now();
-            List<Subscription> dueSubscriptions = subscriptionRepository.findByNextPaymentDate(today);
+        LocalDate today = LocalDate.now();
+        List<Subscription> dueSubscriptions = subscriptionRepository.findByNextPaymentDate(today);
 
-            for (Subscription subscription : dueSubscriptions) {
-                logger.info("Ödeme hatırlatması: {} servisi için {} tutarında ödeme zamanı geldi.",
-                        subscription.getServiceName(), subscription.getAmount());
-            }
-        } catch (Exception e) {
-            logger.error("Ödeme hatırlatmaları çalıştırılırken hata oluştu: {}", e.getMessage());
+        for (Subscription subscription : dueSubscriptions) {
+            String message = "Ödeme hatırlatması: " + subscription.getServiceName() +
+                    " servisi için " + subscription.getAmount() + " tutarında ödeme zamanı geldi.";
+            notificationProducer.sendNotification(message);
         }
     }
+
 }
