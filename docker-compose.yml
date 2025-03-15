@@ -1,0 +1,22 @@
+version: '3'
+services:
+  zookeeper_custom:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper_custom  # Özel ad
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka_custom:  # Kafka için yeni ad
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka_custom  # Özel ad verdik
+    restart: always
+    ports:
+      - "9093:9092"  # Port çakışmasını önlemek için değiştirdik
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper_custom:2181  # Yeni Zookeeper adı
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9093  # Portu da değiştirdik
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper_custom

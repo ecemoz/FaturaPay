@@ -133,7 +133,7 @@ public class SubscriptionService {
     }
 
 
-    @Scheduled(cron = "0 0 9 * * ?") // Her gün sabah 9'da çalışır
+    @Scheduled(cron = "0 0 9 * * ?")
     public void sendPaymentReminders() {
         LocalDate today = LocalDate.now();
         List<Subscription> dueSubscriptions = subscriptionRepository.findByNextPaymentDate(today);
