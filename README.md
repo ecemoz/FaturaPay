@@ -1,6 +1,5 @@
 # 🚀 FaturaPay: Fatura ve Abonelik Yönetimi
 
-![FaturaPay Banner](https://example.com/banner.png)
 
 FaturaPay, kullanıcıların faturalarını yönetmelerini ve ödemelerini takip etmelerini sağlayan modern bir platformdur. Ayrıca abonelik bazlı faturaları destekler ve otomatik hatırlatma sistemleri sunar.
 
