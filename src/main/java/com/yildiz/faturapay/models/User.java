@@ -33,4 +33,6 @@ public class User {
         @JsonManagedReference
         private List<Invoice> invoices;
 
+        @OneToMany(mappedBy = "consumer", cascade = CascadeType.ALL, orphanRemoval = true)
+        private List<Subscription> subscriptions;
     }
