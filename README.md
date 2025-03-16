@@ -4,15 +4,13 @@
 FaturaPay, kullanıcıların faturalarını yönetmelerini ve ödemelerini takip etmelerini sağlayan modern bir platformdur. Ayrıca abonelik bazlı faturaları destekler ve otomatik hatırlatma sistemleri sunar.
 
 ---
-## 🖼️ Ekran Görüntüleri
+## 📸 Ekran Görüntüleri
 
-<img src="https://github.com/user-attachments/assets/b128fbe7-7617-4ad5-9e14-1d5498cf8bb7" width="400">
-<img src="https://github.com/user-attachments/assets/6a913ce0-bb80-4a98-9e78-56cb176b5845" width="400">
-<img src="https://github.com/user-attachments/assets/5b1118b4-b7ab-4a0c-948e-59886c616ebe" width="400">
-<img src="https://github.com/user-attachments/assets/72c7cc45-b48d-43ff-a883-66152aef1962" width="400">
-<img src="https://github.com/user-attachments/assets/5a00ad2a-dc26-4631-99eb-bd945e503af9" width="400">
+| 🔑 Giriş Ekranı | 📊 Dashboard | 📋 Faturalar | 💳 Abonelikler |
+|---------------|-------------|-------------|--------------|
+| <img src="https://github.com/user-attachments/assets/35b35e68-6b03-4499-a232-23cbb7522384" width="350"> | <img src="https://github.com/user-attachments/assets/056100b5-2156-484b-b0d3-2c6abac8171b" width="350"> | <img src="https://github.com/user-attachments/assets/83fbc183-297d-41a1-b536-f6e56d8520fa" width="350"> | <img src="https://github.com/user-attachments/assets/e4d1a1ae-347b-40ab-a46b-d73bd733c58b" width="350"> |
+
 ---
-
 ## 📌 Özellikler
 
 ✅ **JWT ile Kimlik Doğrulama** 🔐  
