@@ -12,6 +12,7 @@ FaturaPay, kullanıcıların faturalarını yönetmelerini ve ödemelerini takip
 <img src="https://github.com/user-attachments/assets/72c7cc45-b48d-43ff-a883-66152aef1962" width="400">
 <img src="https://github.com/user-attachments/assets/5a00ad2a-dc26-4631-99eb-bd945e503af9" width="400">
 ---
+
 ## 📌 Özellikler
 
 ✅ **JWT ile Kimlik Doğrulama** 🔐  
